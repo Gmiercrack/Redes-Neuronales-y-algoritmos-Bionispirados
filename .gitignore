@@ -1,0 +1,22 @@
+# Paquetes de auditoría y binarios grandes (ya archivados; no se versionan)
+*.zip
+
+# Bytecode y cachés de Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Logs
+*.log
+
+# Entornos virtuales
+.venv/
+venv/
+
+# Documentos fuente del enunciado (viven en workspace/user/files/)
+*.docx
+*.pdf
+
+# Material de clase descargado (referencia local de 70+ MB;
+# los extractos citables ya están en texto/)
+material-clase/
