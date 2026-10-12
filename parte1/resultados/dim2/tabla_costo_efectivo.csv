@@ -1,0 +1,13 @@
+funcion,dim,metodo,n_eval_f_mediana,n_eval_grad_mediana,costo_efectivo_mediana,costo_efectivo_max
+rastrigin,2,DE,5000.0,0.0,5000.0,5000
+rastrigin,2,Evolutivo,5000.0,0.0,5000.0,5000
+rastrigin,2,GD_analitico,3178.5,3177.5,15888.5,21516
+rastrigin,2,GD_backtracking,276.0,31.0,400.0,523
+rastrigin,2,GD_numerico,5000.0,0.0,5000.0,5000
+rastrigin,2,PSO,5000.0,0.0,5000.0,5000
+rosenbrock,2,DE,5000.0,0.0,5000.0,5000
+rosenbrock,2,Evolutivo,5000.0,0.0,5000.0,5000
+rosenbrock,2,GD_analitico,5000.0,5000.0,25000.0,25000
+rosenbrock,2,GD_backtracking,5000.0,486.5,6946.0,7188
+rosenbrock,2,GD_numerico,5000.0,0.0,5000.0,5000
+rosenbrock,2,PSO,5000.0,0.0,5000.0,5000
