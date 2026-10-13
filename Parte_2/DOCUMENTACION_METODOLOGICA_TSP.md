@@ -1,4 +1,4 @@
-# Documentación Técnica y Metodológica: Construcción de Matrices de Distancias, Tiempos, Velocidades y Costos Económicos para el Problema del Viajero (TSP)
+# Documentación Técnica y Metodológica: Construcción de Matrices de Distancias, Tiempos, Velocidades y Costos Económicos Totales para el Problema del Viajero (TSP)
 
 **Asignatura:** Redes Neuronales y Algoritmos Bioinspirados  
 **Proyecto:** Trabajo 1 - Parte 2: Problema del Agente Viajero (TSP) en las Capitales de España Peninsular  
@@ -11,15 +11,16 @@
 
 El presente documento describe la metodología técnica, formulación física y matemática, modelado estadístico e implementación computacional empleada para la construcción integral de los conjuntos de datos del **Problema del Agente Viajero (TSP - *Traveling Salesperson Problem*)** sobre las 47 capitales de provincia de la España peninsular. 
 
-Se desarrollaron y validaron seis matrices interurbanas de dimensión $47 \times 47$:
+Se desarrollaron y validaron siete matrices interurbanas de dimensión $47 \times 47$:
 1. **Matriz Geodésica ($D_{\text{recta}}$):** Calculada analíticamente mediante la **Fórmula del Semiverseno (*Haversine*)** vectorizada en NumPy sobre la esfera terrestre (en kilómetros).
 2. **Matriz Vial Real ($D_{\text{carretera}}$):** Obtenida mediante el motor de enrutamiento **OSRM (*Open Source Routing Machine*)** sobre la infraestructura vial real de OpenStreetMap (en kilómetros).
-3. **Matriz Temporal de Conducción ($T_{\text{carretera}}$):** Tiempos reales de viaje en horas, incorporando clasificación de vías, límites legales de velocidad y penalizaciones por intersecciones.
+3. **Matriz Temporal de Conducción ($T_{\text{carretera}}$):** Tiempos reales de viaje en horas, incorporando clasificación de vías, límites legales de velocidad y penalizaciones por giros e intersecciones.
 4. **Matriz de Velocidad Media Efectiva ($V_{\text{efectiva}}$):** Relación física entre distancia y tiempo ($D/T$) en km/h, caracterizando la eficiencia de la red vial interprovincial.
 5. **Matriz de Costo de Combustible ($C_{\text{combustible}}$):** Modelo de consumo energético para el vehículo **Dacia Sandero** (4.7 L / 100 km) con precio de gasolina oficial en España (1.787 €/L), expresado en euros (€).
 6. **Matriz Económica de Peajes ($C_{\text{peajes}}$) y Matriz Booleana ($M_{\text{peajes}}$):** Identificación de autopistas de peaje activas en la Red de Carreteras del Estado y estimación estadística del costo monetario en euros mediante un **Intervalo de Confianza al 95%** de tarifa kilométrica.
+7. **Matriz de Costo Económico Total del Viajero ($C_{\text{total}}$):** Integración multifactorial del salario del vendedor (8.90 €/h), combustible del vehículo y peajes, expresada en euros (€).
 
-Estos datasets permiten formular tanto el TSP mono-objetivo clásico como variantes **multiobjetivo** (distancia vs. tiempo vs. costo monetario integral) y **restringidas** (*toll-free routing*) para algoritmos bioinspirados (Algoritmos Genéticos, Colonias de Hormigas [ACO], Optimización por Enjambre de Partículas [PSO]).
+Estos datasets permiten formular tanto el TSP mono-objetivo clásico como variantes **multiobjetivo** (distancia vs. tiempo vs. presupuesto total) y **restringidas** (*toll-free routing*) para algoritmos bioinspirados (Algoritmos Genéticos, Colonias de Hormigas [ACO], Optimización por Enjambre de Partículas [PSO]).
 
 ---
 
@@ -204,7 +205,38 @@ Filtrando los pares simétricos ($i < j$), se genera la tabla de referencia para
 
 ---
 
-## 8. Formulación Integral para Algoritmos Bioinspirados
+## 8. Matriz de Costo Económico Total del Viajero ($C_{\text{total}}$)
+
+### 8.1. Formulación Multifactorial del Costo Logístico
+Para dotar al problema del agente viajero de un significado económico real y representativo del mundo laboral, se definió el **Costo Total por Trayecto ($C_{\text{total}}$)** como la suma lineal de los tres gastos fundamentales de una empresa de distribución:
+
+$$C_{\text{total}}(i, j) = C_{\text{laboral}}(i, j) + C_{\text{combustible}}(i, j) + C_{\text{peajes}}(i, j)$$
+
+Donde:
+1. **Costo Laboral del Vendedor:** Basado en el Salario Mínimo Interprofesional / salario horario bruto de referencia en España ($S_h = 8.90\text{ €/hora}$):
+   $$C_{\text{laboral}}(i, j) = t_{\text{carretera}}(i, j) \times 8.90\text{ €/h}$$
+2. **Costo de Combustible (Dacia Sandero):**
+   $$C_{\text{combustible}}(i, j) = d_{\text{carretera}}(i, j) \times 0.08399\text{ €/km}$$
+3. **Costo de Peajes:**
+   $$C_{\text{peajes}}(i, j) = \text{Matriz\_costos\_peajes}(i, j)$$
+4. **Diagonal:** $C_{\text{total}}(i, i) = 0.0\text{ €}$.
+
+### 8.2. Hallazgos y Desglose Porcentual del Costo en España
+Al evaluar los 2.162 pares de ciudades con los datos empíricos de la red española, se obtuvieron las siguientes métricas globales:
+
+| Componente de Costo | Gasto Promedio (€) | Porcentaje del Total | Impacto en la Optimización |
+| :--- | :---: | :---: | :--- |
+| **Salario del Trabajador** | **55.27 €** | **54.8 %** | **Principal factor de costo.** El tiempo humano pesa más que el kilometraje. |
+| **Combustible (Sandero)** | **45.29 €** | **44.9 %** | Costo directo variable proporcional a la distancia. |
+| **Peajes de Autopista** | **0.30 €** | **0.3 %** | Costo puntual en corredores específicos de montaña y acceso. |
+| **COSTO TOTAL PROMEDIO** | **100.86 €** | **100.0 %** | Gasto promedio interurbano entre dos capitales peninsulares. |
+
+* **Costo Mínimo Interprovincial:** **14.94 €** (Palencia $\leftrightarrow$ Valladolid, 62.9 km, 0.77 h).
+* **Costo Máximo Interprovincial:** **220.20 €** (Girona $\leftrightarrow$ Pontevedra, 1.212 km, 12.75 h).
+
+---
+
+## 9. Formulación para Algoritmos Bioinspirados
 
 Con estos datasets, los algoritmos bioinspirados pueden evaluar diversos escenarios de optimización:
 
@@ -212,21 +244,25 @@ Con estos datasets, los algoritmos bioinspirados pueden evaluar diversos escenar
 Minimizar exclusivamente el kilometraje total o el tiempo de jornada laboral:
 $$f_{\text{dist}}(\pi) = \sum_{k=1}^{N} d_{\text{carretera}}(\pi_k, \pi_{k+1}), \qquad f_{\text{tiempo}}(\pi) = \sum_{k=1}^{N} t_{\text{carretera}}(\pi_k, \pi_{k+1})$$
 
-### Escenario B: TSP Económico Integral (Combustible + Peajes)
-Minimizar el gasto financiero total del viaje:
-$$f_{\text{económico}}(\pi) = \sum_{k=1}^{N} \left( C_{\text{combustible}}(\pi_k, \pi_{k+1}) + C_{\text{peajes}}(\pi_k, \pi_{k+1}) \right)$$
+### Escenario B: TSP Presupuestario Integral (Función Objetivo en Euros)
+Minimizar el gasto financiero global de la empresa de transporte:
+$$f_{\text{económico}}(\pi) = \sum_{k=1}^{N} C_{\text{total}}(\pi_k, \pi_{k+1})$$
 
-### Escenario C: TSP Multiobjetivo Ponderado
-Minimizar una función de costo logístico integral combinando tiempo y presupuesto:
-$$f_{\text{multi}}(\pi) = w_1 \cdot T(\pi) + w_2 \cdot C_{\text{económico}}(\pi)$$
+```python
+# Evaluación ultra-eficiente en NumPy para Algoritmos Genéticos o PSO
+C_total = np.load("matriz_costo_total_euros.npy")
 
-### Escenario D: TSP Restringido sin Peajes (*Toll-Free TSP*)
+def evaluar_fitness_euros(ruta):
+    return C_total[ruta[:-1], ruta[1:]].sum() + C_total[ruta[-1], ruta[0]]
+```
+
+### Escenario C: TSP Restringido sin Peajes (*Toll-Free TSP*)
 Penalización infinita en la función de aptitud (*fitness*) para rutas que incluyan peajes:
-$$\text{Fitness}(\pi) = f_{\text{dist}}(\pi) + \infty \cdot \sum_{k=1}^{N} M_{\text{peajes}}(\pi_k, \pi_{k+1})$$
+$$\text{Fitness}(\pi) = f_{\text{económico}}(\pi) + \infty \cdot \sum_{k=1}^{N} M_{\text{peajes}}(\pi_k, \pi_{k+1})$$
 
 ---
 
-## 9. Visualización Cartográfica y Análisis de Conectividad
+## 10. Visualización Cartográfica y Análisis de Conectividad
 
 Se diseñaron dos módulos de visualización gráfica en alta resolución (300 DPI):
 
@@ -235,7 +271,7 @@ Se diseñaron dos módulos de visualización gráfica en alta resolución (300 D
 
 ---
 
-## 10. Inventario de Archivos Generados en el Repositorio
+## 11. Inventario de Archivos Generados en el Repositorio
 
 | Archivo | Formato | Descripción |
 | :--- | :---: | :--- |
@@ -245,14 +281,16 @@ Se diseñaron dos módulos de visualización gráfica en alta resolución (300 D
 | `matriz_costo_combustible_euros.csv`| CSV | Matriz de costo de combustible Dacia Sandero ($47 \times 47$, €). |
 | `matriz_peajes_espana.csv` | CSV | Matriz booleana de presencia de peajes ($47 \times 47$, binaria 0/1). |
 | `matriz_costo_peajes_euros.csv` | CSV | Matriz de costo económico estimado de peajes ($47 \times 47$, €). |
+| `matriz_costo_total_euros.csv` | CSV | Matriz de costo total multifactorial (Salario + Combustible + Peajes, €). |
+| `matriz_costo_total_euros.npy` | NPY | Formato binario ultrarrápido para optimización bioinspirada ($\mathcal{O}(1)$ I/O). |
 | `tabla_reporte_peajes.csv` | CSV | Tabla resumen de tramos de peaje e intervalo de confianza al 95%. |
-| `D_recta.npy` / `D_carretera.npy` | NPY | Formato binario ultrarrápido para los algoritmos bioinspirados. |
+| `D_recta.npy` / `D_carretera.npy` | NPY | Formatos binarios base para cálculo de distancias. |
 | `red_vial_espana_tsp.png` | PNG | Mapa de grafo vial de k-vecinos en kilómetros (300 DPI). |
 | `red_tiempos_espana_tsp.png` | PNG | Mapa de grafo temporal de k-vecinos en horas (300 DPI). |
 
 ---
 
-## 11. Diagrama del Flujo Metodológico Integral
+## 12. Diagrama del Flujo Metodológico Integral
 
 ```mermaid
 flowchart TD
@@ -271,13 +309,16 @@ flowchart TD
     G --> COMB[Modelo Combustible Dacia Sandero: 4.7 L/100km, 1.787 €/L]
     COMB --> C_COMB[Matriz Costo Combustible 47x47 €]
     
+    H --> LAB[Modelo Laboral: 8.90 €/hora]
+    LAB --> C_LAB[Matriz Costo Salario Vendedor 47x47 €]
+    
     A --> I[Catálogo RCE / MITMS Concesiones]
     I --> J[Matriz Booleana Peajes M_peajes 0/1]
     
     G & J --> K[Modelo Estadístico IC 95%: 0.125 €/km]
     K --> L[Matriz Costo Peajes C_peajes 47x47 €]
     
-    C_COMB & L --> C_TOTAL[Matriz Costo Económico Total: Combustible + Peajes]
+    C_LAB & C_COMB & L --> C_TOTAL[Matriz Costo Económico Total 47x47 €]
     
     G & H & V & C_COMB & L & C_TOTAL --> M[Exportación CSV y NPY]
     G & H --> N[Visualizaciones Cartográficas PNG 300 DPI]
@@ -287,7 +328,7 @@ flowchart TD
 
 ---
 
-## 12. Referencias Bibliográficas
+## 13. Referencias Bibliográficas
 
 1. **Applegate, D. L., Bixby, R. E., Chvátal, V., & Cook, W. J. (2006).**  
    *The Traveling Salesman Problem: A Computational Study.* Princeton University Press.
@@ -303,15 +344,17 @@ flowchart TD
    *Informe Anual del Sector de Concesiones de Autopistas de Peaje en España.* Asociación de Empresas Constructoras y Concesionarias de Infraestructuras.
 7. **Ministerio para la Transición Ecológica y el Reto Demográfico (MITECO). (2026).**  
    *Geoportal de Gasolineras: Estadísticas y Precios de Carburantes en España.* Gobierno de España. Recuperado de: [https://geoportalgasolineras.es/](https://geoportalgasolineras.es/).
-8. **Dacia España - Grupo Renault. (2024).**  
+8. **Ministerio de Trabajo y Economía Social. (2024).**  
+   *Real Decreto por el que se fija el Salario Mínimo Interprofesional (SMI) en España.* Boletín Oficial del Estado (BOE).
+9. **Dacia España - Grupo Renault. (2024).**  
    *Ficha Técnica Oficial y Homologación de Consumo Mixto Dacia Sandero (Protocolo WLTP).* Renault Group.
-9. **Walpole, R. E., Myers, R. H., Myers, S. L., & Ye, K. (2012).**  
-   *Probability & Statistics for Engineers & Scientists* (9th ed.). Pearson. (Referencia para estimación de Intervalos de Confianza con distribución $t$-Student).
-10. **Ballou, R. H., Rahbar, H., & Amini, M. M. (2002).**  
+10. **Walpole, R. E., Myers, R. H., Myers, S. L., & Ye, K. (2012).**  
+    *Probability & Statistics for Engineers & Scientists* (9th ed.). Pearson. (Referencia para estimación de Intervalos de Confianza con distribución $t$-Student).
+11. **Ballou, R. H., Rahbar, H., & Amini, M. M. (2002).**  
     *Development of actual highway distances from network data.* Transportation Research Part E: Logistics and Transportation Review, 38(4), 267–281.
-11. **Harris, C. R., Millman, K. J., van der Walt, S. J., et al. (2020).**  
+12. **Harris, C. R., Millman, K. J., van der Walt, S. J., et al. (2020).**  
     *Array programming with NumPy.* Nature, 585(7825), 357–362. DOI: [10.1038/s41586-020-2649-2](https://doi.org/10.1038/s41586-020-2649-2).
-12. **OpenStreetMap Foundation (2024).**  
+13. **OpenStreetMap Foundation (2024).**  
     *Nominatim Usage Policy (Fair Use).* Recuperado de: [https://operations.osmfoundation.org/policies/nominatim/](https://operations.osmfoundation.org/policies/nominatim/).
-13. **Project OSRM (2024).**  
+14. **Project OSRM (2024).**  
     *OSRM HTTP API Documentation: Table Service.* Recuperado de: [http://project-osrm.org/docs/v5.24.0/api/#table-service](http://project-osrm.org/docs/v5.24.0/api/#table-service).
