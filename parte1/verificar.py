@@ -141,27 +141,34 @@ def main():
             for c in ce_cols))
         check(ce_ok, f"dim{dim}: tabla_costo_efectivo.csv == agregados")
 
-        with open(os.path.join(d, "curvas.json")) as fh:
-            curvas = json.load(fh)
-        ok_curvas = True
-        for _, row in df.iterrows():
-            key = f"{row['funcion']}|{row['metodo']}|{row['semilla'] - 1983}"
-            h = np.array(curvas.get(key, []), dtype=float)
-            if len(h) == 0:
-                ok_curvas = False
-                break
-            bmin, fb = float(h[:, 2].min()), float(row["f_best"])
-            iguales = (bmin == fb or
-                       (np.isfinite(bmin) and np.isfinite(fb) and
-                        abs(bmin - fb) <= 1e-9 * max(1.0, abs(fb))))
-            if not (np.all(np.diff(h[:, 0]) > 0) and
-                    np.all(np.diff(h[:, 2]) <= 0) and
-                    h[-1, 0] == row["n_eval_f"] and iguales):
-                ok_curvas = False
-                break
-        check(ok_curvas,
-              f"dim{dim}: curvas.json consistente con corridas.csv "
-              f"(eventos reales, n_f creciente, mejor monótono)")
+        ruta_curvas = os.path.join(d, "curvas.json")
+        if os.path.exists(ruta_curvas):
+            with open(ruta_curvas) as fh:
+                curvas = json.load(fh)
+            ok_curvas = True
+            for _, row in df.iterrows():
+                key = f"{row['funcion']}|{row['metodo']}|{row['semilla'] - 1983}"
+                h = np.array(curvas.get(key, []), dtype=float)
+                if len(h) == 0:
+                    ok_curvas = False
+                    break
+                bmin, fb = float(h[:, 2].min()), float(row["f_best"])
+                iguales = (bmin == fb or
+                           (np.isfinite(bmin) and np.isfinite(fb) and
+                            abs(bmin - fb) <= 1e-9 * max(1.0, abs(fb))))
+                if not (np.all(np.diff(h[:, 0]) > 0) and
+                        np.all(np.diff(h[:, 2]) <= 0) and
+                        h[-1, 0] == row["n_eval_f"] and iguales):
+                    ok_curvas = False
+                    break
+            check(ok_curvas,
+                  f"dim{dim}: curvas.json consistente con corridas.csv "
+                  f"(eventos reales, n_f creciente, mejor monótono)")
+        else:
+            # curvas.json es un artefacto grande y regenerable: no se
+            # versiona. En un clon limpio se genera con experimentos.py.
+            print(f"AVISO| dim{dim}: no existe curvas.json; se omite su "
+                  f"verificación (ejecute experimentos.py para generarlo)")
 
         for f_ in FUNCIONES:
             for kind in ("convergencia", "boxplot"):
