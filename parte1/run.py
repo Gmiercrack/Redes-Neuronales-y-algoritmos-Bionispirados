@@ -1,4 +1,4 @@
-"""Pipeline completo de la Parte 1 en un solo comando (auditoría 4/5).
+"""Pipeline completo de la Parte 1 en un solo comando.
 
 Uso oficial (configuración del reporte):
     python run.py                  # dims 2 y 3, 30 corridas, todo el pipeline

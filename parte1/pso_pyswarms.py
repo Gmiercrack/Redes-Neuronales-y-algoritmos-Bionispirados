@@ -20,7 +20,7 @@ from instrumentacion import PresupuestoAgotado
 
 
 class _PararPSO(Exception):
-    """Señal interna: detener el enjambre de forma controlada (H2)."""
+    """Señal interna: detener el enjambre de forma controlada."""
 
 
 def pso_pyswarms(cont, dim, lim_inf, lim_sup, n_particles=50, iters=100,

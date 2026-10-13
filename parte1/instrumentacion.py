@@ -1,4 +1,4 @@
-"""Instrumentación común de los experimentos (correcciones de auditoría H2-H6).
+"""Instrumentación común de los experimentos.
 
 Diseño:
 - Toda evaluación de f pasa por Contador.eval_f. Si el presupuesto se agota,

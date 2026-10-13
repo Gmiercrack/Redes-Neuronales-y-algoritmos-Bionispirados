@@ -7,8 +7,8 @@ __pycache__/
 report.log
 *.log
 
-# Artefactos grandes regenerables (se generan con experimentos.py;
-# no se versionan, sí se incluyen en el paquete de auditoría)
+# Artefactos grandes regenerables: se generan con experimentos.py
+# y no se versionan
 curvas.json
 
 # Entornos virtuales

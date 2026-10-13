@@ -23,7 +23,7 @@ from instrumentacion import PresupuestoAgotado
 # con x~1e33, h=1e-3 queda bajo el ulp de float64 (~1e17) y f(x+h)==f(x),
 # de modo que un gradiente numérico da exactamente 0 y parecería
 # "convergencia". La guarda se evalúa ANTES de cualquier chequeo de
-# convergencia. (Hallazgo de la 4ª auditoría.)
+# convergencia.
 DIVERG_NORMA = 1e6
 
 

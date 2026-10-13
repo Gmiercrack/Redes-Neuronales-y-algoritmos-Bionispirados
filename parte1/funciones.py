@@ -95,7 +95,7 @@ def verifica_minimos(dim=2, n_puntos=5, seed=0):
             err_ade.append(np.linalg.norm(g - ga) / max(1e-12, np.linalg.norm(g)))
         print(f"{nombre} (d={dim}): err_rel central={max(err_cen):.2e}, "
               f"hacia-adelante(h=1e-3)={max(err_ade):.2e}")
-        # H3 (auditoría 3): umbrales explícitos que hacen fallar la prueba.
+        # Umbrales explícitos que hacen fallar la prueba.
         # Central (h=1e-7): error ~1e-9 observado; umbral 1e-5.
         # Hacia adelante (h=1e-3, el que usa el GD): error de truncamiento
         # O(h) ~1e-3 observado; umbral 5e-2. Una fórmula mal daría error O(1).

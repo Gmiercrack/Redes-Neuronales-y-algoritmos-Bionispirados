@@ -1,4 +1,4 @@
-"""Verificación automática de consistencia de los artefactos (auditoría §3, §6).
+"""Verificación automática de consistencia de los artefactos.
 
 Comprueba, sin re-correr los experimentos:
 1. Funciones y gradientes (2D y 3D): mínimos, gradiente analítico vs.
@@ -59,7 +59,7 @@ def main():
         verifica_minimos(dim=dim)
     check(True, "funciones y gradientes verificados en 2D y 3D")
 
-    # H2 (auditoría 3): PSO con presupuesto menor que la población debe
+    # PSO con presupuesto menor que la población debe
     # detenerse de forma controlada, sin lanzar excepción
     from instrumentacion import Contador
     from pso_pyswarms import pso_pyswarms

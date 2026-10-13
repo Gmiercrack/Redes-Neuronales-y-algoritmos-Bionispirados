@@ -1,10 +1,10 @@
 """Algoritmo evolutivo (esquema de clase) y evolución diferencial generacional.
 
-Correcciones de auditoría:
-- H7: DE ahora es generacional (síncrona): los candidatos de una generación se
+Notas de implementación:
+- DE es generacional (síncrona): los candidatos de una generación se
   calculan todos contra la población actual y la población se reemplaza al
   final de la generación. Variante DE/rand/1/bin (Storn & Price, 1997).
-- H2/H3: toda evaluación de f pasa por el Contador (presupuesto duro,
+- Toda evaluación de f pasa por el Contador (presupuesto duro,
   registro de eventos reales). El evolutivo hace exactamente 100x50 = 5000
   evaluaciones; DE hace 50 iniciales + generaciones completas hasta agotar el
   presupuesto (99x50 -> 5000 exactas).
@@ -16,8 +16,8 @@ from instrumentacion import PresupuestoAgotado
 
 
 def _spawn(seed, n):
-    """Deriva n flujos independientes (auditoría 4: antes rng y pob_inicial
-    compartían el mismo default_rng(seed)). Acepta int o SeedSequence."""
+    """Deriva n flujos independientes (rng y pob_inicial no deben
+    compartir el mismo default_rng(seed)). Acepta int o SeedSequence."""
     ss = seed if isinstance(seed, SeedSequence) else SeedSequence(seed)
     return ss.spawn(n)
 
@@ -54,8 +54,8 @@ def cruzamiento_un_punto(poblacion, frac_c, rng):
     hijos = np.zeros((n_cru, m))
     for i in range(n_pares):
         # punto de cruce en [1, m-1]: siempre hay intercambio real.
-        # (Antes: rng.choice(m) incluía p=0, que en 2D clonaba a los padres
-        # con probabilidad 1/2. Hallazgo de la 4ª auditoría.)
+        # (rng.choice(m) incluiría p=0, que en 2D clonaría a los padres
+        # con probabilidad 1/2.)
         p = rng.integers(1, m)
         hijos[i] = np.concatenate((padres[i, :p], madres[i, p:]))
         hijos[n_pares + i] = np.concatenate((madres[i, :p], padres[i, p:]))

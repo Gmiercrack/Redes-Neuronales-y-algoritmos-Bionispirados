@@ -1,4 +1,4 @@
-"""Experimentos Parte 1 (v5: correcciones de la 4ª auditoría).
+"""Experimentos Parte 1.
 
 Uso oficial (configuración del reporte):
     python experimentos.py --dim 2 --runs 30
@@ -10,13 +10,13 @@ Para la demo en vivo / exploración, los hiperparámetros se pueden variar:
 Diseño:
 - 30 corridas por (función, método); semilla de evaluación: 1983 + r.
   Cada método recibe un flujo aleatorio INDEPENDIENTE derivado con
-  SeedSequence.spawn (antes, el x0 del GD era el primer individuo de las
-  poblaciones de EA/DE).
+  SeedSequence.spawn (así el x0 del GD no coincide con el primer individuo
+  de las poblaciones de EA/DE).
 - Presupuesto DURO e igual para todos, vía Contador (≤5000 f-evals).
-- eta del GD: calibración con rejilla en el rango estable (auditoría 4),
+- eta del GD: calibración con rejilla en el rango estable,
   10 semillas SEPARADAS (7000+r), criterio lexicográfico
   (fracción divergida, mediana). Puede fijarse con --eta.
-- Equivalencia de costos (auditoría 4, ejemplo del enunciado):
+- Equivalencia de costos (ejemplo del enunciado):
   1 gradiente analítico ≡ 2n evaluaciones de f (costo de reemplazo por
   diferencias centrales). Se guarda n_costo_efectivo = n_f + 2·dim·n_grad.
 - Métricas: f_best (comparación), f_final, motivo, éxito = f_best < 1e-6,
@@ -47,8 +47,8 @@ SEED_CALIB = 7000
 
 # Rejilla de calibración en el rango de estabilidad teórica (eta < 2/L):
 # Rastrigin L≈2+40π²≈397 -> eta<5e-3; Rosenbrock exige etas aún menores.
-# (La rejilla anterior llegaba a 5e-2: el GD "rebotaba" en vez de descender.
-#  v7: refinada entre 1e-4 y 5e-4, donde está el óptimo de Rosenbrock.)
+# (Con etas mayores el GD "rebota" en vez de descender; la rejilla es más
+#  fina entre 1e-4 y 5e-4, donde está el óptimo de Rosenbrock.)
 ETAS_GRID = [1e-5, 5e-5, 1e-4, 2e-4, 3e-4, 5e-4, 1e-3, 2e-3, 5e-3]
 N_SEEDS_CALIB = 10
 
