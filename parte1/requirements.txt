@@ -1,0 +1,9 @@
+# Versiones fijadas del entorno donde se generaron los resultados (2026-10-11).
+# Python 3.12.3. OJO: matplotlib 3.6.3 NO tiene wheel para Python 3.12
+# (solo existe como paquete del sistema en algunas distros); se fija 3.9.4.
+# Verificado con una instalación real en un venv limpio.
+numpy==1.26.4
+pandas==2.1.4
+matplotlib==3.9.4
+pyswarms==1.3.0
+Pillow==10.2.0

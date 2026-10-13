@@ -1,0 +1,19 @@
+# Bytecode y cachés de Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Logs
+report.log
+*.log
+
+# Artefactos grandes regenerables: se generan con experimentos.py
+# y no se versionan
+curvas.json
+
+# Entornos virtuales
+.venv/
+venv/
+
+# Salidas de demos en vivo (run.py las aisla automáticamente)
+resultados/demo/
