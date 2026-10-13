@@ -1,0 +1,8 @@
+# Esto crea o actualiza el .gitignore ignorando archivos pesados y temporales
+@"
+.venv/
+__pycache__/
+*.rar
+.ipynb_checkpoints/
+parte1/
+"@ | Out-File -FilePath .gitignore -Encoding utf8
