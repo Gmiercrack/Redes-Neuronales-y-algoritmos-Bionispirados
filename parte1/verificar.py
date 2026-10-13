@@ -48,6 +48,8 @@ def main():
     ap.add_argument("--dims", type=int, nargs="+", default=[2, 3])
     ap.add_argument("--runs", type=int, default=30,
                     help="corridas esperadas por configuración")
+    ap.add_argument("--sin-figuras", action="store_true",
+                    help="no exige PNG ni GIF (para corridas sin graficas.py)")
     args = ap.parse_args()
     RES = os.path.join(BASE, args.out)
 
@@ -170,14 +172,15 @@ def main():
             print(f"AVISO| dim{dim}: no existe curvas.json; se omite su "
                   f"verificación (ejecute experimentos.py para generarlo)")
 
-        for f_ in FUNCIONES:
-            for kind in ("convergencia", "boxplot"):
-                check(os.path.exists(os.path.join(d, f"{kind}_{f_}.png")),
-                      f"dim{dim}: {kind}_{f_}.png existe")
-        if dim == 2:
-            for g in ("gif_gd_rastrigin.gif", "gif_de_rastrigin.gif"):
-                check(os.path.exists(os.path.join(d, g)),
-                      f"dim2: {g} existe")
+        if not args.sin_figuras:
+            for f_ in FUNCIONES:
+                for kind in ("convergencia", "boxplot"):
+                    check(os.path.exists(os.path.join(d, f"{kind}_{f_}.png")),
+                          f"dim{dim}: {kind}_{f_}.png existe")
+            if dim == 2:
+                for g in ("gif_gd_rastrigin.gif", "gif_de_rastrigin.gif"):
+                    check(os.path.exists(os.path.join(d, g)),
+                          f"dim2: {g} existe")
 
     print()
     if check.fallos:

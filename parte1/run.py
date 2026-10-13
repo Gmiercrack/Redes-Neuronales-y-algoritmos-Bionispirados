@@ -7,6 +7,9 @@ Demo en vivo (NO pisa los resultados oficiales: usa resultados/demo/):
     python run.py --dims 2 --runs 3 --resto --eta 0.001 --pso-c1 1.5
     python run.py --out resultados/mi-prueba --dims 2 --runs 3
 
+Demo rápida (solo experimentos, sin figuras ni GIFs):
+    python run.py --dims 2 --sin-graficas
+
 verificar.py siempre revisa la carpeta que realmente se usó.
 """
 import argparse
@@ -35,6 +38,9 @@ def main():
                          "una ruta relativa se interpreta respecto al "
                          "directorio actual, no respecto a parte1/)")
     ap.add_argument("--no-verificar", action="store_true")
+    ap.add_argument("--sin-graficas", action="store_true",
+                    help="omite graficas.py (figuras y GIFs); útil para una "
+                         "demo rápida de solo los experimentos")
     ap.add_argument("--resto", nargs=argparse.REMAINDER, default=[],
                     help="flags extra para experimentos.py (p. ej. --eta 0.001)")
     a = ap.parse_args()
@@ -52,14 +58,16 @@ def main():
         sh([sys.executable, "experimentos.py", "--dim", str(dim),
             "--runs", str(a.runs), "--out", os.path.join(base, f"dim{dim}")]
            + a.resto)
-    sh([sys.executable, "graficas.py", f"--base={base}"]
-       + [str(d) for d in a.dims])
+    if not a.sin_graficas:
+        sh([sys.executable, "graficas.py", f"--base={base}"]
+           + [str(d) for d in a.dims])
     # verificar.py siempre revisa la carpeta que realmente se usó
     # (antes, con --out X y config oficial, miraba resultados/ por defecto)
     if not a.no_verificar:
         sh([sys.executable, "verificar.py", "--out", base,
             "--dims"] + [str(d) for d in a.dims] +
-           ["--runs", str(a.runs)])
+           ["--runs", str(a.runs)]
+           + (["--sin-figuras"] if a.sin_graficas else []))
     print("Pipeline completo OK.")
 
 
