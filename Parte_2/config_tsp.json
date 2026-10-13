@@ -1,0 +1,24 @@
+{
+  "_nota": "Parametros del TSP. Cualquiera se puede cambiar tambien por linea de comandos (ver python algoritmo_genetico.py --help). Las claves que empiezan por _ son comentarios.",
+
+  "archivo_distancias": "matriz_distancias_carretera.csv",
+  "archivo_tiempos": "matriz_tiempos_carretera.csv",
+  "archivo_peajes": "matriz_costo_peajes_euros.csv",
+  "archivo_combustible": "matriz_costo_combustible_euros.csv",
+  "archivo_coordenadas": "coordenadas_capitales.csv",
+
+  "_nota_valor_hora": "Valor por defecto igual al usado en matriz_costo_total_euros.csv (8.90 EUR/h). Es el parametro a estudiar: cambiarlo con --valor-hora.",
+  "valor_hora_eur": 8.9,
+
+  "ciudad_inicio": "Madrid",
+
+  "tam_poblacion": 200,
+  "generaciones": 1500,
+  "prob_cruce": 0.9,
+  "prob_mutacion": 0.3,
+  "tam_torneo": 3,
+  "elitismo": 2,
+  "tipo_mutacion": "inversion",
+  "semilla": 1983,
+  "corridas": 1
+}
