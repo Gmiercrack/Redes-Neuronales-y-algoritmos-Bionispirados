@@ -1,0 +1,48 @@
+﻿Paso,Origen,Destino,Costo Tramo (€),Costo Acumulado (€)
+1,Córdoba,Jaén,22.96,22.96
+2,Jaén,Granada,17.8,40.76
+3,Granada,Málaga,26.8,67.56
+4,Málaga,Almería,42.55,110.11
+5,Almería,Murcia,38.24,148.35
+6,Murcia,Alicante,28.89,177.24
+7,Alicante,Valencia,32.84,210.08
+8,Valencia,Castellón de la Plana,15.44,225.52
+9,Castellón de la Plana,Tarragona,34.84,260.36
+10,Tarragona,Barcelona,19.78,280.14
+11,Barcelona,Girona,20.05,300.19
+12,Girona,Zaragoza,71.13,371.32
+13,Zaragoza,Huesca,23.23,394.55
+14,Huesca,Lleida,19.01,413.56
+15,Lleida,Teruel,53.32,466.88
+16,Teruel,Cuenca,42.65,509.53
+17,Cuenca,Albacete,31.53,541.06
+18,Albacete,Ciudad Real,40.02,581.08
+19,Ciudad Real,Toledo,26.77,607.85
+20,Toledo,Madrid,24.74,632.59
+21,Madrid,Ávila,34.7,667.29
+22,Ávila,Segovia,23.36,690.65
+23,Segovia,Guadalajara,46.89,737.54
+24,Guadalajara,Soria,34.26,771.8
+25,Soria,Logroño,29.84,801.64
+26,Logroño,Pamplona,26.92,828.56
+27,Pamplona,San Sebastián,16.66,845.22
+28,San Sebastián,Vitoria-Gasteiz,19.51,864.73
+29,Vitoria-Gasteiz,Bilbao,21.05,885.78
+30,Bilbao,Santander,19.98,905.76
+31,Santander,Oviedo,36.8,942.56
+32,Oviedo,Lugo,42.87,985.43
+33,Lugo,A Coruña,19.52,1004.95
+34,A Coruña,Pontevedra,43.22,1048.17
+35,Pontevedra,Ourense,33.86,1082.03
+36,Ourense,León,54.79,1136.82
+37,León,Palencia,35.33,1172.15
+38,Palencia,Burgos,17.57,1189.72
+39,Burgos,Valladolid,24.18,1213.9
+40,Valladolid,Zamora,29.82,1243.72
+41,Zamora,Salamanca,24.9,1268.62
+42,Salamanca,Cáceres,37.87,1306.49
+43,Cáceres,Badajoz,19.91,1326.4
+44,Badajoz,Cádiz,62.84,1389.24
+45,Cádiz,Sevilla,23.83,1413.07
+46,Sevilla,Huelva,17.34,1430.41
+47,Huelva,Córdoba,44.22,1474.63

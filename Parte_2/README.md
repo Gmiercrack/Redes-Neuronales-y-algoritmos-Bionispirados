@@ -8,6 +8,59 @@ python -m venv .venv
 pip install -r requirements.txt
 ```
 
+## Optimización por Colonia de Hormigas (ACO)
+
+La ejecución del enfoque bioinspirado mediante Colonia de Hormigas se realiza mediante dos notebooks interactivos en Jupyter / VS Code de forma secuencial:
+
+```text
+1. P_viajero_coordenadas.ipynb   ➔  (Preprocesamiento, coordenadas y matrices de costo)
+2. ANT_ALGORIMT.IPYNB            ➔  (Optimización ACO, hiperparámetros, rutas y GIF)
+```
+
+---
+
+### Paso 1: Ejecutar `P_viajero_coordenadas.ipynb`
+
+Este notebook se encarga de la obtención de datos geográficos, el modelado económico del problema y la consolidación de las matrices de viaje para las 47 capitales peninsulares:
+
+* **Geocodificación y coordenadas:** Obtiene las coordenadas geográficas exactas (latitud y longitud) de las 47 capitales provinciales mediante el servicio OpenStreetMap Nominatim.
+* **Modelo económico y costos:** Integra las distancias por carretera ($km$), tiempos de conducción ($h$), peajes de autopista (€) y consumo de combustible (€) con el valor horario del vendedor ($v_h = 8.90$ €/h) para calcular la función de costo total asimétrico:
+  $$C_{ij} = v_h\,T_{ij} + P_{ij} + F_{ij}$$
+* **Visualización cartográfica:** Genera mapas exploratorios de dispersión de las capitales y diagramas de correlación entre distancia, tiempo y costos.
+
+#### Documentos exportados para la ejecución de ACO:
+Todos los archivos se exportan organizados en las subcarpetas del proyecto:
+
+| Carpeta | Archivo | Descripción y Uso en ACO |
+|---|---|---|
+| `Resultados_CSV_ANT/` | `matriz_costo_total_euros.csv` | **Matriz principal (47×47)** de costos totales en euros. Es la matriz de adyacencia de entrada directa para alimentar el optimizador ACO. |
+| `Resultados_CSV_ANT/` | `coordenadas_capitales_espana.csv` | Tabla con `ciudad`, `latitud`, `longitud` para el ploteo espacial del itinerario. |
+| `Parte_2/` | `coordenadas_capitales.csv` | Tabla con formato estándar (`ciudad, lat, lon`) requerida por `gif_ruta.py` para generar la animación cartográfica. |
+| `Resultados_CSV_ANT/` | `matriz_distancias_carretera.csv` | Matriz de distancias en kilómetros (usada para estadísticas de recorrido). |
+| `Resultados_CSV_ANT/` | `matriz_tiempos_carretera.csv` | Matriz de tiempos de viaje en horas. |
+| `Resultados_CSV_ANT/` | `matriz_costo_combustible_euros.csv` | Matriz de gasto en combustible en euros. |
+| `Resultados_CSV_ANT/` | `matriz_costo_peajes_euros.csv` | Matriz de costos de peaje en euros. |
+| `Resultados imagenes/` | `distribucion_capitales_espana.png` | Mapa de nodos con la distribución geográfica de las 47 capitales. |
+
+---
+
+### Paso 2: Ejecutar `ANT_ALGORIMT.IPYNB`
+
+Una vez generadas las matrices en `Resultados_CSV_ANT/`, se ejecuta este notebook para resolver el TSP mediante el algoritmo de Colonia de Hormigas:
+
+1. **Carga y validación:** Carga la matriz de costos `matriz_costo_total_euros.csv` e integra la librería `AntColonyOptimizer`.
+2. **Sintonización de hiperparámetros:** Realiza corridas y experimentos de sensibilidad comparando tres perfiles:
+   * **Caso Base:** Equilibrio entre exploración de feromonas y visibilidad heurística ($\alpha=1.0$, $\beta=2.5$, $\rho=0.10$).
+   * **Caso Explorador:** Mayor número de hormigas, evaporación lenta y selección probabilística ($\alpha=1.0$, $\beta=2.0$, $\text{choose\_best}=0.0$).
+   * **Caso Voraz:** Fuerte ponderación por el costo inverso del tramo ($\beta=4.5$, $\text{choose\_best}=0.25$).
+3. **Análisis de convergencia:** Grafica las curvas comparativas de la evolución del costo mínimo a lo largo de las iteraciones.
+4. **Visualización de la ruta óptima:** Traza el mapa completo del recorrido óptimo cerrado sobre España con flechas direccionales, nodo de inicio resaltado y detalle del itinerario paso a paso con costos acumulados.
+5. **Generación de la animación y GIF:**
+   * Exporta `Resultados_CSV_ANT/rutas_por_generacion_aco.csv` con la mejor ruta en cada iteración.
+   * Invoca `gif_ruta.py` para compilar el GIF de la evolución de la colonia (`evolucion_ruta.gif`) y el mapa final (`ruta_final.png`) en `Resultados imagenes/`.
+
+---
+
 ## Algoritmo genético
 
 Un solo comando, desde la carpeta `Parte_2`:
@@ -56,11 +109,10 @@ Con $v_h = 8.90$ €/h la matriz coincide con `matriz_costo_total_euros.csv` (di
 Las matrices son asimétricas: el sentido del recorrido importa. `costos.py` se comparte con la colonia de hormigas
 para que ambos algoritmos optimicen la misma matriz.
 
-### Pendiente
+### Coordenadas geográficas y mapa base
 
-- `coordenadas_capitales.csv` (columnas `ciudad,lat,lon`, exportadas del notebook), necesario para el script del GIF.
-
-El contorno del mapa (`datos/peninsula_iberica.geojson`) viene de Natural Earth (dominio público), recortado a la península.
+- `coordenadas_capitales.csv` (columnas `ciudad,lat,lon`), exportado automáticamente por `P_viajero_coordenadas.ipynb` (o generado con `exportar_coordenadas.py`), necesario para el script del GIF.
+- El contorno del mapa (`datos/peninsula_iberica.geojson`) viene de Natural Earth (dominio público), recortado a la península.
 
 ## GIF de la ruta sobre el mapa
 
