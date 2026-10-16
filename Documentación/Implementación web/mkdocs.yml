@@ -1,0 +1,87 @@
+site_name: "Trabajo 1: Optimización Bioinspirada y Numérica"
+site_description: "Informe técnico, análisis experimental y blog interactivo del estudio de optimización numérica y combinatoria con algoritmos bioinspirados."
+site_author: "Gian Carlo Mier Estrada, Juan Jose Sanchez Mejia, Nestor Enrique Mendoza Rueda"
+site_url: "https://gmiercrack.github.io/Redes-Neuronales-y-algoritmos-Bionispirados/"
+repo_url: "https://github.com/Gmiercrack/Redes-Neuronales-y-algoritmos-Bionispirados"
+repo_name: "Gmiercrack/Redes-Neuronales-y-algoritmos-Bionispirados"
+
+theme:
+  name: material
+  language: es
+  palette:
+    # Modo Claro
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Cambiar a modo oscuro
+    # Modo Oscuro
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Cambiar a modo claro
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - navigation.expand
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.code.annotate
+
+markdown_extensions:
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - admonition
+  - pymdownx.details
+  - tables
+  - attr_list
+  - toc:
+      permalink: true
+
+extra_javascript:
+  - javascripts/mathjax.js
+  - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
+
+plugins:
+  - search
+  - minify:
+      minify_html: true
+
+nav:
+  - Inicio: index.md
+  - "Parte 1: Numérica":
+      - "Fundamentos y Algoritmos": parte1/fundamentos.md
+      - "Metodología y Costo Efectivo": parte1/metodologia.md
+      - "Resultados y Comparativa": parte1/resultados.md
+  - "Parte 2: TSP (España)":
+      - "Modelado Logístico Real": parte2/modelado_logistico.md
+      - "Colonia de Hormigas (ACO)": parte2/colonia_hormigas.md
+      - "Algoritmos Genéticos (AG)": parte2/algoritmos_geneticos.md
+      - "Comparativa de Rutas y Resultados": parte2/comparativa_itinerarios.md
+  - "Inteligencia Artificial":
+      - "Cacería de Alucinaciones": inteligencia_artificial/caceria_alucinacion.md
+  - "Recursos":
+      - "Videos y Repositorio": recursos/videos_y_repo.md
+      - "Referencias": recursos/referencias.md

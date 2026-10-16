@@ -22,4 +22,8 @@ env/
 *.pdf
 material-clase/
 
+# MkDocs build directory
+site/
+
+
 
