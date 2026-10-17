@@ -20,12 +20,18 @@ Trabajo_1/
 │   ├── requirements.txt    # Dependencias específicas de Parte 1
 │   ├── run.py              # Script principal para reproducir experimentos
 │   └── ...
-└── Parte_2/                # Parte 2: TSP de las 47 capitales de España peninsular
-    ├── README.md           # Guía completa de ejecución (ACO y Algoritmo Genético)
-    ├── requirements.txt    # Dependencias específicas de Parte 2
-    ├── ANT_ALGORIMT.ipynb  # Optimización por Colonia de Hormigas (ACO)
-    ├── algoritmo_genetico.py # Algoritmo Genético para TSP
-    └── ...
+├── Parte_2/                # Parte 2: TSP de las 47 capitales de España peninsular
+│   ├── README.md           # Guía completa de ejecución (ACO y Algoritmo Genético)
+│   ├── requirements.txt    # Dependencias específicas de Parte 2
+│   ├── ANT_ALGORIMT.ipynb  # Optimización por Colonia de Hormigas (ACO)
+│   ├── algoritmo_genetico.py # Algoritmo Genético para TSP
+│   └── ...
+└── Documentación/          # Reporte técnico e informe interactivo
+    ├── Implementación web/ # Sitio web tipo blog con la documentación completa
+    │   ├── index.html      # Página principal interactiva del informe
+    │   └── ...
+    ├── Trabajo_1_Optimizacion_Bioinspirada.md
+    └── Trabajo_1_Aplicaciones de Optimización...pdf
 ```
 
 ---
@@ -75,3 +81,35 @@ Trabajo_1/
   pip install -r requirements.txt
   ```
   *(Consultar [`Parte_2/README.md`](Parte_2/README.md) para los pasos específicos de ejecución de los notebooks o scripts).*
+
+---
+
+## 🌐 Documentación y Reporte Web (Blog del Proyecto)
+
+El reporte integral del trabajo, que consolida la fundamentación teórica, análisis estadísticos, gráficos comparativos, mapas de ruta para el TSP y conclusiones, se encuentra implementado como una **aplicación web estática interactiva tipo blog**.
+
+* **Ubicación en el repositorio:** Directorio [`Documentación/Implementación web/`](Documentación/Implementación%20web/)
+* **Documento base e informe PDF:** Disponibles en [`Documentación/`](Documentación/)
+
+### 🚀 Cómo acceder a la página desplegada (GitHub Pages)
+
+El proyecto cuenta con un flujo de integración y despliegue continuo configurado mediante **GitHub Actions** (`.github/workflows/deploy.yml`), el cual publica automáticamente el blog en **GitHub Pages** con cada actualización en la rama principal `main`.
+
+1. **Acceso directo en línea:**  
+   👉 **[https://gmiercrack.github.io/Redes-Neuronales-y-algoritmos-Bionispirados/](https://gmiercrack.github.io/Redes-Neuronales-y-algoritmos-Bionispirados/)**
+
+2. **Acceso desde la interfaz del repositorio en GitHub:**
+   - **Opción A (Deployments):** En la página de inicio del repositorio en GitHub, dirígete a la columna lateral derecha, en la sección **Environments / Deployments**, y haz clic sobre **`github-pages`**.
+   - **Opción B (Actions):** Entra a la pestaña **Actions**, selecciona el workflow **"Deploy Web Application to GitHub Pages"**, pulsa sobre la última ejecución exitosa y encontrarás el enlace en el apartado **deploy**.
+
+### 💻 Cómo visualizar la documentación localmente
+
+Si deseas explorar el blog de forma local sin conexión a internet:
+* **Opción rápida:** Navega hasta [`Documentación/Implementación web/index.html`](Documentación/Implementación%20web/index.html) y ábrelo con doble clic en cualquier navegador web moderno (Chrome, Edge, Firefox).
+* **Vía servidor local HTTP (recomendada):**
+  ```bash
+  cd "Documentación/Implementación web"
+  python -m http.server 8000
+  ```
+  Luego abre en tu navegador: [http://localhost:8000](http://localhost:8000)
+
